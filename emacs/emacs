@@ -1,6 +1,6 @@
 ;; personal info
 (setq user-full-name "rzhou")
-(setq user-mail-address "rzhou@tetrioncapital.com")
+(setq user-mail-address "zhou.youyi@gmail.com")
 
 ;; setup my customized emacs load path
 (add-to-list 'load-path "~/.emacs.d/sugars" )
