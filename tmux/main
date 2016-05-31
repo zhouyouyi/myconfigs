@@ -1,0 +1,17 @@
+set-window-option -g allow-rename off
+
+rename-session "main"
+
+new-window -k -c ~/ -n shell -t 0
+new-window -c ~/workspace/firedrake/src -n firedrake
+new-window -c ~/workspace/tetrion-conf/src -n conf
+new-window -c ~/workspace/tetrion-scripts/src -n scripts
+new-window -c ~/ -n tw
+new-window -c ~/ -n nw
+split-window -v -c ~/
+new-window -c ~/ -n ht
+split-window -v -c ~/
+new-window -c ~/ -n gm
+new-window -c ~/workspace/mango/src -n strat
+split-window -v -c ~/workspace/hoogen/src 
+new-window -c ~/ -n prod

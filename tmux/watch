@@ -1,0 +1,9 @@
+set-window-option -g allow-rename off
+
+rename-session "watch"
+
+new-window -k -c ~/ -n shell -t 0
+new-window -c ~/workspace/tetrion-web/src/iwatch -n iwatch
+new-window -c ~/deploy -n deploy
+new-window -c ~/ -n shark
+new-window -c ~/ -n shell
