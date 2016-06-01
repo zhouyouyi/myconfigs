@@ -1,0 +1,54 @@
+# -*- mode: conf -*-
+
+[ui]
+username = Roy Zhou <rzhou@tetrioncapital.com>
+editor = emacsclient -t
+merge = meld
+
+[extensions]
+hgk=
+color=
+hgext.purge=
+mq=
+rebase=
+histedit=
+record=
+guestrepo=/local/dist/dotfiles/hg/guestrepo
+#collapse=
+
+[trusted]
+users = *
+groups = *
+
+[tortoisehg]
+ui.language = en
+vdiff = meld
+editor = emacsclient
+shell = /usr/bin/terminator -T "%(reponame)s"
+immediate = 
+tabwidth = 4
+monitorrepo = always
+fontlist = Source Code Pro,10,-1,5,50,0,0,0,0,0
+issue.regex = #(\d+)\b
+issue.link = http://redmine.hk.tetrioncapital.com/issues/{1}
+issue.linkmandatory = True
+changeset.link = http://redmine.hk.tetrioncapital.com/projects/farpoint/repository/revisions/{node|short}
+postpull = rebase
+confirmpush = True
+
+#[reviewboard]
+#server = https://reviewboard.in.athenacr.com
+#user = rzhou
+
+
+[diff]
+git = True
+ignorews = True
+ignorewsamount = True
+ignoreblanklines = True
+
+
+[annotate]
+ignorews = True
+ignorewsamount = True
+ignoreblanklines = True
