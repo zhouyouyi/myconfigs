@@ -11,16 +11,16 @@
 (package-initialize)
 
 ;; turn off menu bar
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 
 ;; turn off tool bar
-(tool-bar-mode -1)
+;; (tool-bar-mode -1)
 
 ;; turn off scroll bar
 (toggle-scroll-bar -1)
 
 ;; turn off line numbers in certain modes
-(require 'linum-off)
+;; (require 'linum-off)
 
 ;; non-blinking cursor
 (blink-cursor-mode 0)
@@ -296,33 +296,6 @@
             (setq tab-width 4)
             (setq lua-indent-level 4)))
 
-;; autoinsert C/C++ header
-(define-auto-insert
-  (cons "\\.\\([Hh]\\|hh\\|hpp\\)\\'" "My C / C++ header")
-  '(nil
-    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
-    "\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat (upcase nopath) "_H")))
-      (concat "#ifndef " ident "\n"
-              "#define " ident "\n\n\n"
-              "\n\n#endif // " ident "\n"))
-    ))
-
-;; auto insert C/C++
-(define-auto-insert
-  (cons "\\.\\([Cc]\\|cc\\|cpp\\)\\'" "My C++ implementation")
-  '(nil
-    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
-    "\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat nopath ".h")))
-      (if (file-exists-p ident)
-          (concat "#include \"" ident "\"\n")))
-    ))
-
 ;; python shell
 (setq
  python-shell-interpreter "ipython" 
@@ -340,12 +313,12 @@
 (require 'rtags)
 (require 'company)
 
-(setq rtags-autostart-diagnostics t)
-(rtags-diagnostics)
-(setq rtags-completions-enabled t)
-(push 'company-rtags company-backends)
+;; (setq rtags-autostart-diagnostics t)
+;; (rtags-diagnostics)
+;; (setq rtags-completions-enabled t)
+;; (push 'company-rtags company-backends)
 (global-company-mode)
-(define-key c-mode-base-map (kbd "<C-.>") (function company-complete))
+;; (define-key c-mode-base-map (kbd "<C-.>") (function company-complete))
 
 ;; ggtags
 (require 'ggtags)
