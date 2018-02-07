@@ -1,6 +1,6 @@
 ;; personal info
-(setq user-full-name "Roy Zhou")
-(setq user-mail-address "zhou.youyi@gmail.com")
+(setq user-full-name "rzhou")
+(setq user-mail-address "rzhou@tetrioncapital.com")
 
 ;; setup my customized emacs load path
 (add-to-list 'load-path "~/.emacs.d/sugars" )
@@ -11,16 +11,16 @@
 (package-initialize)
 
 ;; turn off menu bar
-;; (menu-bar-mode -1)
+(menu-bar-mode -1)
 
 ;; turn off tool bar
-;; (tool-bar-mode -1)
+(tool-bar-mode -1)
 
 ;; turn off scroll bar
 (toggle-scroll-bar -1)
 
 ;; turn off line numbers in certain modes
-;; (require 'linum-off)
+(require 'linum-off)
 
 ;; non-blinking cursor
 (blink-cursor-mode 0)
@@ -34,6 +34,10 @@
 
 ;; show buffer name on window title
 (setq frame-title-format "%b@emacs")
+
+;; solarized
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/color-theme-solarized")
+;; (load-theme 'solarized-dark t)
 
 ;; ido
 (require 'ido)
@@ -63,6 +67,13 @@
 
 ;; auto reload buffers when files changed
 (global-auto-revert-mode t)
+
+;; disable bold fonts
+(set-face-bold-p 'bold nil)
+
+;; flycheck
+;;(require 'flycheck)
+;;(add-hook 'after-init-hook #'global-flychek-mode)
 
 ;; org mode
 (require 'org)
@@ -136,18 +147,90 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#657b83"])
  '(column-number-mode t)
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "590759adc4a5bf7a183df81654cce13b96089e026af67d92b5eec658fb3fe22f" default)))
  '(display-time-mode t)
+ '(fci-rule-color "#073642")
  '(haskell-mode-hook
    (quote
     (turn-on-haskell-decl-scan turn-on-haskell-doc turn-on-haskell-indentation)))
+ '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#002b36" 0.25)
+    (quote
+     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   (quote
+    (("#073642" . 0)
+     ("#546E00" . 20)
+     ("#00736F" . 30)
+     ("#00629D" . 50)
+     ("#7B6000" . 60)
+     ("#8B2C02" . 70)
+     ("#93115C" . 85)
+     ("#073642" . 100))))
+ '(hl-bg-colors
+   (quote
+    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+ '(hl-fg-colors
+   (quote
+    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+ '(magit-diff-use-overlays nil)
+ '(nrepl-message-colors
+   (quote
+    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (ggtags lua-mode rtags company cmake-mode solarized-theme org)))
- '(show-paren-mode t))
+    (python-mode gotham-theme ggtags lua-mode rtags company cmake-mode org flycheck)))
+ '(pos-tip-background-color "#073642")
+ '(pos-tip-foreground-color "#93a1a1")
+ '(show-paren-mode t)
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(solarized-scale-org-headlines nil)
+ '(solarized-use-less-bold t)
+ '(solarized-use-variable-pitch nil)
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#c85d17")
+     (60 . "#be730b")
+     (80 . "#b58900")
+     (100 . "#a58e00")
+     (120 . "#9d9100")
+     (140 . "#959300")
+     (160 . "#8d9600")
+     (180 . "#859900")
+     (200 . "#669b32")
+     (220 . "#579d4c")
+     (240 . "#489e65")
+     (260 . "#399f7e")
+     (280 . "#2aa198")
+     (300 . "#2898af")
+     (320 . "#2793ba")
+     (340 . "#268fc6")
+     (360 . "#268bd2"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (quote
+    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
+ '(xterm-color-names
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+ '(xterm-color-names-bright
+   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
 
 ;; default theme
 (load-theme 'solarized-dark t)
@@ -165,6 +248,25 @@
 
 ;; compilation mode
 (setq compilation-scroll-output t)
+
+;; (defun compilation-exit-autoclose(status code msg)
+;;   ;; if M-x compile exists with a 0
+;;   (when (and(eq status 'exit) (zerop code))
+;;     (bury-buffer "*compilation*")
+;;     (delete-window (get-buffer-window (get-buffer "*compilation*"))))
+;;   (cons msg code))
+;; (setq compilation-exit-message-function 'compilation-exit-autoclose)
+
+;; (defun custom-compilation-hook()
+;;   (when (not (get-buffer-window "*compilation*"))
+;;     (save-selected-window
+;;       (save-excursion
+;; 	(let* ((w(split-window-vertically))
+;; 	       (h(window-height w)))
+;; 	  (select-window w)
+;; 	  (switch-to-buffer "*compilation*")
+;; 	  (shrink-window(- h 10)))))))
+;; (add-hook 'compilation-mode-hook 'custom-compilation-hook)
 
 ;; hook sconscript to python mode
 (setq auto-mode-alist
@@ -296,21 +398,87 @@
             (setq tab-width 4)
             (setq lua-indent-level 4)))
 
+;; autoinsert C/C++ header
+(define-auto-insert
+  (cons "\\.\\([Hh]\\|hh\\|hpp\\)\\'" "My C / C++ header")
+  '(nil
+    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
+    "\n"
+    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
+           (nopath (file-name-nondirectory noext))
+           (ident (concat (upcase nopath) "_H")))
+      (concat "#ifndef " ident "\n"
+              "#define " ident "\n\n\n"
+              "\n\n#endif // " ident "\n"))
+    ))
+
+;; auto insert C/C++
+(define-auto-insert
+  (cons "\\.\\([Cc]\\|cc\\|cpp\\)\\'" "My C++ implementation")
+  '(nil
+    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
+    "\n"
+    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
+           (nopath (file-name-nondirectory noext))
+           (ident (concat nopath ".h")))
+      (if (file-exists-p ident)
+          (concat "#include \"" ident "\"\n")))
+    ))
+
 ;; python shell
-(setq
- python-shell-interpreter "ipython" 
- python-shell-interpreter-args "" 
- python-shell-prompt-regexp "In \\[[0-9]+\\]: " 
- python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: " 
- python-shell-completion-setup-code
-   "from IPython.core.completerlib import module_completion" 
- python-shell-completion-module-string-code
-   "';'.join(module_completion('''%s'''))\n" 
- python-shell-completion-string-code
-   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+;; (setq
+;;  python-shell-interpreter "ipython" 
+;;  python-shell-interpreter-args "-i"
+;;  )
+(require 'python)
+(setq ansi-color-for-comint-mode t)
+(setq python-shell-interpreter "ipython")
+
+;; TAGS
+(defun create-tags (dir-name)
+     "Create tags file."
+     (interactive "DDirectory: ")
+     (eshell-command
+      (format "find %s -type f -name \"*.h\" -o -name \"*.cc\" -o -name \"*.c\" | etags --append --lang=c++" dir-name)))
+
+(defadvice find-tag (around refresh-etags activate)
+  "Rerun etags and reload tags if tag not found and redo find-tag.
+   If buffer is modified, ask about save before running etags."
+  (let ((extension (file-name-extension (buffer-file-name))))
+    (condition-case err
+        ad-do-it
+      (error (and (buffer-modified-p)
+                  (not (ding))
+                  (y-or-n-p "Buffer is modified, save it? ")
+                  (save-buffer))
+             (er-refresh-etags extension)
+             ad-do-it))))
+
+(defun er-refresh-etags (&optional extension)
+  "Run etags on all peer files in current dir and reload them silently."
+  (interactive)
+  (shell-command (format "etags *.%s" (or extension "el")))
+  (let ((tags-revert-without-query t))  ; don't query, revert silently
+    (visit-tags-table default-directory nil)))
+
+;; irony mode
+;; (require 'irony)
+;; (add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c-mode-hook 'irony-mode)
+;;(add-hook 'objc-mode-hook 'irony-mode)
+
+;; replace the `completion-at-point' and `complete-symbol' bindings in
+;; irony-mode's buffers by irony-mode's function
+;; (defun my-irony-mode-hook ()
+;;   (define-key irony-mode-map [remap completion-at-point]
+;;     'irony-completion-at-point-async)
+;;   (define-key irony-mode-map [remap complete-symbol]
+;;     'irony-completion-at-point-async))
+;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;; rtags + company mode
-(require 'rtags)
+;; (require 'rtags)
 (require 'company)
 
 ;; (setq rtags-autostart-diagnostics t)
@@ -326,3 +494,31 @@
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1))))
+
+;; Unbind Pesky Sleep Button
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
+
+(defun revert-all-buffers ()
+  "Iterate through the list of buffers and revert them, e.g. after a
+    new branch has been checked out."
+  (interactive)
+  (when (yes-or-no-p "Are you sure - any changes in open buffers will be lost! ")
+    (let ((frm1 (selected-frame)))
+      (make-frame)
+      (let ((frm2 (next-frame frm1)))
+        (select-frame frm2)
+        (make-frame-invisible)
+        (dolist (x (buffer-list))
+          (let ((test-buffer (buffer-name x)))
+            (when (not (string-match "\*" test-buffer))
+              (when (not (file-exists-p (buffer-file-name x)))
+                (select-frame frm1)
+                (when (yes-or-no-p (concat "File no longer exists (" (buffer-name x) "). Close buffer? "))
+                  (kill-buffer (buffer-name x)))
+                (select-frame frm2))
+              (when (file-exists-p (buffer-file-name x))
+                (switch-to-buffer (buffer-name x))
+                (revert-buffer t t t)))))
+        (select-frame frm1)
+        (delete-frame frm2)))))
