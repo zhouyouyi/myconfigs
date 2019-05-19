@@ -1,26 +1,65 @@
+;;; package --- Summary
+;;; Commentary:
+;;; my Emacs setup
+
+;;; Code:
 ;; personal info
-(setq user-full-name "rzhou")
-(setq user-mail-address "rzhou@tetrioncapital.com")
+(setq user-full-name "royzhou")
+(setq user-mail-address "zhou.youyi@gmail.com")
 
-;; setup my customized emacs load path
-(add-to-list 'load-path "~/.emacs.d/sugars" )
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
+(add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
+(condition-case nil
+    (require 'use-package)
+  (file-error
+   (require 'package)
+   (add-to-list 'package-archives
+		'("melpa" . "http://melpa.org/packages/") t)
+   (package-initialize)
+   (package-refresh-contents)
+   (package-install 'use-package)
+   (require 'use-package)))
+
+;; define my most used packages
+;; easy editing parens
+(use-package paredit :ensure t)
+
+;; flycheck for syntax checking
+(use-package flycheck :ensure t :config (global-flycheck-mode))
+
+;; exec path from shell
+(use-package exec-path-from-shell :ensure t :config (exec-path-from-shell-initialize))
+
+;; lsp mode
+(require 'cc-mode)
+
+(use-package projectile :ensure t)
+(use-package treemacs :ensure t)
+(use-package yasnippet :ensure t)
+(use-package lsp-mode :ensure t)
+(use-package hydra :ensure t)
+(use-package company-lsp :ensure t)
+(use-package lsp-ui :ensure t)
+(use-package lsp-java :ensure t :after lsp :config (add-hook 'java-mode-hook 'lsp))
+
+(use-package dap-mode :ensure t :after lsp-mode :config (dap-mode t) (dap-ui-mode t))
+
+;; smart window switch
+(use-package ace-window :ensure t :bind ("C-x o" . ace-window))
 
 ;; turn off menu bar
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 
 ;; turn off tool bar
-(tool-bar-mode -1)
+;; (tool-bar-mode -1)
 
 ;; turn off scroll bar
-(toggle-scroll-bar -1)
+;; (toggle-scroll-bar -1)
 
 ;; turn off line numbers in certain modes
-(require 'linum-off)
+;; (require 'linum-off)
 
 ;; non-blinking cursor
 (blink-cursor-mode 0)
@@ -39,15 +78,27 @@
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/color-theme-solarized")
 ;; (load-theme 'solarized-dark t)
 
+(use-package solarized-theme :ensure t :config (load-theme 'solarized-dark t))
+
 ;; ido
-(require 'ido)
-(ido-mode t)
+;; (require 'ido)
+;; (ido-mode t)
+
+;; helm
+(use-package helm
+  :ensure t
+  :config
+  (require 'helm-config)
+  (global-set-key (kbd "M-x") #'helm-M-x)
+  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+  (global-set-key (kbd "C-x C-f") #'helm-find-files)
+  (helm-mode 1))
 
 ;; auto-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; shell mode
-(require 'shell)
+;; (require 'shell)
 
 ;; desktop mode
 (desktop-save-mode 1)
@@ -63,180 +114,182 @@
 (show-paren-mode 1)
 
 ;; don't show line number
-(global-linum-mode nil)
+;; (global-linum-mode nil)
 
 ;; auto reload buffers when files changed
 (global-auto-revert-mode t)
 
 ;; disable bold fonts
-(set-face-bold-p 'bold nil)
+;; (set-face-bold-p 'bold nil)
 
 ;; flycheck
 ;;(require 'flycheck)
 ;;(add-hook 'after-init-hook #'global-flychek-mode)
 
 ;; org mode
-(require 'org)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(setq org-log-done t)
-(setq org-agenda-files (list "~/org/rzhou.org"))
+(use-package org :ensure t)
 
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+;; (require 'org)
+;; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+;; (setq org-log-done t)
+;; (setq org-agenda-files (list "~/org/rzhou.org"))
 
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "chocolate" :weight bold)
-              ("NEXT" :foreground "sky blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "khaki" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold)
-              ("PHONE" :foreground "forest green" :weight bold))))
+;; setq org-todo-keywords
+;;       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+;;               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
-(setq org-use-fast-todo-selection t)
+;; (setq org-todo-keyword-faces
+;;       (quote (("TODO" :foreground "chocolate" :weight bold)
+;;               ("NEXT" :foreground "sky blue" :weight bold)
+;;               ("DONE" :foreground "forest green" :weight bold)
+;;               ("WAITING" :foreground "orange" :weight bold)
+;;               ("HOLD" :foreground "khaki" :weight bold)
+;;               ("CANCELLED" :foreground "forest green" :weight bold)
+;;               ("MEETING" :foreground "forest green" :weight bold)
+;;               ("PHONE" :foreground "forest green" :weight bold))))
 
-(setq org-tag-alist '((:startgroup . nil)
-                      ("@OFFICE" . ?o) ("@HOME" . ?h)
-                      (:endgroup . nil)
-                      ("READING" . ?r)
-                      ("WRITING" . ?w)
-                      ("MEETING" . ?m)))
-(setq org-directory "~/org")
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-(setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
-         "* TODO %?\n  %i\n  %a")
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a")))
+;; (setq org-use-fast-todo-selection t)
 
-(add-hook 'org-mode-hook 
-          (lambda ()
-            (local-set-key "\M-n" 'outline-next-visible-heading)
-            (local-set-key "\M-p" 'outline-previous-visible-heading)
-            ;; table
-            (local-set-key "\C-\M-w" 'org-table-copy-region)
-            (local-set-key "\C-\M-y" 'org-table-paste-rectangle)
-            (local-set-key "\C-\M-l" 'org-table-sort-lines)
-            ;; display images
-            ;; (local-set-key "\M-I" 'org-toggle-iimage-in-org)
-            ;; plot
-            (local-set-key "\M-\C-g" 'org-plot/gnuplot)
-            ;; fix tab
-            (local-set-key "\C-y" 'yank)))
+;; (setq org-tag-alist '((:startgroup . nil)
+;;                       ("@OFFICE" . ?o) ("@HOME" . ?h)
+;;                       (:endgroup . nil)
+;;                       ("READING" . ?r)
+;;                       ("WRITING" . ?w)
+;;                       ("MEETING" . ?m)))
+;; (setq org-directory "~/org")
+;; (setq org-default-notes-file (concat org-directory "/notes.org"))
+;; (setq org-capture-templates
+;;       '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+;;          "* TODO %?\n  %i\n  %a")
+;;         ("j" "Journal" entry (file+datetree "~/org/journal.org")
+;;          "* %?\nEntered on %U\n  %i\n  %a")))
 
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
+;; (add-hook 'org-mode-hook 
+;;           (lambda ()
+;;             (local-set-key "\M-n" 'outline-next-visible-heading)
+;;             (local-set-key "\M-p" 'outline-previous-visible-heading)
+;;             ;; table
+;;             (local-set-key "\C-\M-w" 'org-table-copy-region)
+;;             (local-set-key "\C-\M-y" 'org-table-paste-rectangle)
+;;             (local-set-key "\C-\M-l" 'org-table-sort-lines)
+;;             ;; display images
+;;             ;; (local-set-key "\M-I" 'org-toggle-iimage-in-org)
+;;             ;; plot
+;;             (local-set-key "\M-\C-g" 'org-plot/gnuplot)
+;;             ;; fix tab
+;;             (local-set-key "\C-y" 'yank)))
+
+;; (global-set-key "\C-cl" 'org-store-link)
+;; (global-set-key "\C-ca" 'org-agenda)
+;; (global-set-key "\C-cc" 'org-capture)
+;; (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; C-Style
-(c-add-style "tetrion-c-style"
-             '("linux"
-               (c-basic-offset . 4)
-               (c-offsets-alist . ( (innamespace . [0] ) ) )
-               )
-             )
+;; (c-add-style "tetrion-c-style"
+;;              '("linux"
+;;                (c-basic-offset . 4)
+;;                (c-offsets-alist . ( (innamespace . [0] ) ) )
+;;                )
+;;              )
 
 ;; c-style
-(setq c-default-style "tetrion-c-style" )
+;; (setq c-default-style "tetrion-c-style" )
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#657b83"])
- '(column-number-mode t)
- '(compilation-message-face (quote default))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#839496")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(custom-safe-themes
-   (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "590759adc4a5bf7a183df81654cce13b96089e026af67d92b5eec658fb3fe22f" default)))
- '(display-time-mode t)
- '(fci-rule-color "#073642")
- '(haskell-mode-hook
-   (quote
-    (turn-on-haskell-decl-scan turn-on-haskell-doc turn-on-haskell-indentation)))
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#002b36" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
- '(highlight-symbol-foreground-color "#93a1a1")
- '(highlight-tail-colors
-   (quote
-    (("#073642" . 0)
-     ("#546E00" . 20)
-     ("#00736F" . 30)
-     ("#00629D" . 50)
-     ("#7B6000" . 60)
-     ("#8B2C02" . 70)
-     ("#93115C" . 85)
-     ("#073642" . 100))))
- '(hl-bg-colors
-   (quote
-    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
- '(hl-fg-colors
-   (quote
-    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
- '(magit-diff-use-overlays nil)
- '(nrepl-message-colors
-   (quote
-    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(package-selected-packages
-   (quote
-    (python-mode gotham-theme ggtags lua-mode rtags company cmake-mode org flycheck)))
- '(pos-tip-background-color "#073642")
- '(pos-tip-foreground-color "#93a1a1")
- '(show-paren-mode t)
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(solarized-scale-org-headlines nil)
- '(solarized-use-less-bold t)
- '(solarized-use-variable-pitch nil)
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2"))))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   (quote
-    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
- '(xterm-color-names
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
- '(xterm-color-names-bright
-   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(ansi-color-names-vector
+;;    ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#657b83"])
+;;  '(column-number-mode t)
+;;  '(compilation-message-face (quote default))
+;;  '(cua-global-mark-cursor-color "#2aa198")
+;;  '(cua-normal-cursor-color "#839496")
+;;  '(cua-overwrite-cursor-color "#b58900")
+;;  '(cua-read-only-cursor-color "#859900")
+;;  '(custom-safe-themes
+;;    (quote
+;;     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "590759adc4a5bf7a183df81654cce13b96089e026af67d92b5eec658fb3fe22f" default)))
+;;  '(display-time-mode t)
+;;  '(fci-rule-color "#073642")
+;;  '(haskell-mode-hook
+;;    (quote
+;;     (turn-on-haskell-decl-scan turn-on-haskell-doc turn-on-haskell-indentation)))
+;;  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+;;  '(highlight-symbol-colors
+;;    (--map
+;;     (solarized-color-blend it "#002b36" 0.25)
+;;     (quote
+;;      ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+;;  '(highlight-symbol-foreground-color "#93a1a1")
+;;  '(highlight-tail-colors
+;;    (quote
+;;     (("#073642" . 0)
+;;      ("#546E00" . 20)
+;;      ("#00736F" . 30)
+;;      ("#00629D" . 50)
+;;      ("#7B6000" . 60)
+;;      ("#8B2C02" . 70)
+;;      ("#93115C" . 85)
+;;      ("#073642" . 100))))
+;;  '(hl-bg-colors
+;;    (quote
+;;     ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+;;  '(hl-fg-colors
+;;    (quote
+;;     ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+;;  '(magit-diff-use-overlays nil)
+;;  '(nrepl-message-colors
+;;    (quote
+;;     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
+;;  '(package-selected-packages
+;;    (quote
+;;     (python-mode gotham-theme ggtags lua-mode rtags company cmake-mode org flycheck)))
+;;  '(pos-tip-background-color "#073642")
+;;  '(pos-tip-foreground-color "#93a1a1")
+;;  '(show-paren-mode t)
+;;  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+;;  '(solarized-scale-org-headlines nil)
+;;  '(solarized-use-less-bold t)
+;;  '(solarized-use-variable-pitch nil)
+;;  '(term-default-bg-color "#002b36")
+;;  '(term-default-fg-color "#839496")
+;;  '(vc-annotate-background nil)
+;;  '(vc-annotate-color-map
+;;    (quote
+;;     ((20 . "#dc322f")
+;;      (40 . "#c85d17")
+;;      (60 . "#be730b")
+;;      (80 . "#b58900")
+;;      (100 . "#a58e00")
+;;      (120 . "#9d9100")
+;;      (140 . "#959300")
+;;      (160 . "#8d9600")
+;;      (180 . "#859900")
+;;      (200 . "#669b32")
+;;      (220 . "#579d4c")
+;;      (240 . "#489e65")
+;;      (260 . "#399f7e")
+;;      (280 . "#2aa198")
+;;      (300 . "#2898af")
+;;      (320 . "#2793ba")
+;;      (340 . "#268fc6")
+;;      (360 . "#268bd2"))))
+;;  '(vc-annotate-very-old-color nil)
+;;  '(weechat-color-list
+;;    (quote
+;;     (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83")))
+;;  '(xterm-color-names
+;;    ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+;;  '(xterm-color-names-bright
+;;    ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
 
 ;; default theme
-(load-theme 'solarized-dark t)
+;; (load-theme 'solarized-dark t)
 
 ;; Start a server
-(server-start)
+;; (server-start)
 
 ;; hook c-x k to kll server buffer
 (add-hook 'server-switch-hook
@@ -271,7 +324,7 @@
 ;; hook sconscript to python mode
 (setq auto-mode-alist
       (cons '("SConstruct" . python-mode) auto-mode-alist))
- (setq auto-mode-alist
+(setq auto-mode-alist
       (cons '("SConscript" . python-mode) auto-mode-alist))
 
 (defun jn-disable-<> ()
@@ -293,6 +346,21 @@
 ;;(add-hook 'c++-mode-hook 'flycheck-mode)
 ;;(add-hook 'c-mode-hook 'flycheck-mode)
 
+;; expand region
+(use-package expand-region :ensure t :config (global-set-key (kbd "C-c =") 'er/expand-region))
+
+;; multiple cursors
+(use-package multiple-cursors
+	     :ensure t
+	     :config
+	     (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+	     (global-set-key (kbd "C-c >") 'mc/mark-next-like-this)
+	     (global-set-key (kbd "C-c <") 'mc/mark-previous-like-this)
+	     (global-set-key (kbd "C-c C-@") 'mc/mark-all-like-this))
+
+;; markdown mode
+(use-package markdown-mode :ensure t)
+
 ;; set compile command
 (global-set-key "\C-x\C-m" 'compile)
 (add-hook 'c++-mode-hook
@@ -307,6 +375,9 @@
 (add-to-list 'auto-mode-alist '("sconscript$" . python-mode))
 (add-to-list 'auto-mode-alist '("sconstruct$" . python-mode))
 
+;; emacs in lisp
+(add-to-list 'auto-mode-alist '("emacs" . emacs-lisp-mode))
+
 ;; We use .h files for C++ (not good, but what can you do). Tell
 ;; emacs that so it knows to put them in C++ mode.
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -315,14 +386,11 @@
 (add-to-list 'auto-mode-alist '("\\.erl\\'" . erlang-mode))
 
 ;; We will enable buffer
-(require 'uniquify)
-
-;; use unique buffer names.
-(setq uniquify-buffer-name-style 'post-forward)
+;; (require 'uniquify)
 
 ;; disable tooltips - they make graphical emacs very laggy over
 ;; remote X sessions
-(tooltip-mode -1)
+;; (tooltip-mode -1)
 
 ;; Nobody likes ~ files
 (setq make-backup-files nil)
@@ -333,8 +401,8 @@
 (setq require-final-newline t)
 
 ;; setup gdb nicely
-(setq gud-gdb-command-name "gdb --annotate=3")
-(setq gdb-many-windows t)
+;; (setq gud-gdb-command-name "gdb --annotate=3")
+;; (setq gdb-many-windows t)
 
 ;; C-c / to comment or uncomment region
 (global-set-key (kbd "C-c /") 'comment-or-uncomment-region)
@@ -346,35 +414,35 @@
 (global-set-key (kbd "C-c g") 'grep-find)
 
 ;; switch to rej files when merging
-(defun switch-hg-reject ()
-  (interactive)
-  (let ((other-file
-         (if (string= (substring (buffer-file-name) -4 nil) ".rej")
-             (substring (buffer-file-name) 0 -4)
-           (concat (buffer-file-name) ".rej"))))
-    (if (file-exists-p other-file)
-        (switch-to-buffer (find-file-noselect other-file))
-      (message (format "No alternate reject file found" other-file)))))
+;; (defun switch-hg-reject ()
+;;   (interactive)
+;;   (let ((other-file
+;;          (if (string= (substring (buffer-file-name) -4 nil) ".rej")
+;;              (substring (buffer-file-name) 0 -4)
+;;            (concat (buffer-file-name) ".rej"))))
+;;     (if (file-exists-p other-file)
+;;         (switch-to-buffer (find-file-noselect other-file))
+;;       (message (format "No alternate reject file found" other-file)))))
 
-(global-set-key (kbd "C-c j") 'switch-hg-reject)
+;; (global-set-key (kbd "C-c j") 'switch-hg-reject)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight normal :height 98 :width normal))))
- '(org-date ((t (:foreground "cornflower blue")))))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(default ((t (:family "Source Code Pro" :foundry "adobe" :slant normal :weight normal :height 98 :width normal))))
+;;  '(org-date ((t (:foreground "cornflower blue")))))
 
-(defun on-frame-open (frame)
-    (if (not (display-graphic-p frame))
-        (progn
-          (set-face-background 'default "unspecified-bg" frame)
-          (set-face-background 'linum   "unspecified-bg" frame)
-          )
-      ))
-(on-frame-open (selected-frame))
-(add-hook 'after-make-frame-functions 'on-frame-open)
+;; (defun on-frame-open (frame)
+;;     (if (not (display-graphic-p frame))
+;;         (progn
+;;           (set-face-background 'default "unspecified-bg" frame)
+;;           (set-face-background 'linum   "unspecified-bg" frame)
+;;           )
+;;       ))
+;; (on-frame-open (selected-frame))
+;; (add-hook 'after-make-frame-functions 'on-frame-open)
 
 ;; setup 4 spaces indent for .py
 (add-hook 'python-mode-hook
@@ -398,68 +466,41 @@
             (setq tab-width 4)
             (setq lua-indent-level 4)))
 
-;; autoinsert C/C++ header
-(define-auto-insert
-  (cons "\\.\\([Hh]\\|hh\\|hpp\\)\\'" "My C / C++ header")
-  '(nil
-    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
-    "\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat (upcase nopath) "_H")))
-      (concat "#ifndef " ident "\n"
-              "#define " ident "\n\n\n"
-              "\n\n#endif // " ident "\n"))
-    ))
-
-;; auto insert C/C++
-(define-auto-insert
-  (cons "\\.\\([Cc]\\|cc\\|cpp\\)\\'" "My C++ implementation")
-  '(nil
-    "// Contents Copyright 2015 Tetrion Capital LLC. All Rights Reserved.\n"
-    "\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat nopath ".h")))
-      (if (file-exists-p ident)
-          (concat "#include \"" ident "\"\n")))
-    ))
-
 ;; python shell
 ;; (setq
 ;;  python-shell-interpreter "ipython" 
 ;;  python-shell-interpreter-args "-i"
 ;;  )
-(require 'python)
-(setq ansi-color-for-comint-mode t)
-(setq python-shell-interpreter "ipython")
+;; (require 'python)
+;; (setq ansi-color-for-comint-mode t)
+;; (setq python-shell-interpreter "ipython")
 
 ;; TAGS
-(defun create-tags (dir-name)
-     "Create tags file."
-     (interactive "DDirectory: ")
-     (eshell-command
-      (format "find %s -type f -name \"*.h\" -o -name \"*.cc\" -o -name \"*.c\" | etags --append --lang=c++" dir-name)))
+;; (defun create-tags (dir-name)
+;;      "Create tags file."
+;;      (interactive "DDirectory: ")
+;;      (eshell-command
+;;       (format "find %s -type f -name \"*.h\" -o -name \"*.cc\" -o -name \"*.c\" | etags --append --lang=c++" dir-name)))
 
-(defadvice find-tag (around refresh-etags activate)
-  "Rerun etags and reload tags if tag not found and redo find-tag.
-   If buffer is modified, ask about save before running etags."
-  (let ((extension (file-name-extension (buffer-file-name))))
-    (condition-case err
-        ad-do-it
-      (error (and (buffer-modified-p)
-                  (not (ding))
-                  (y-or-n-p "Buffer is modified, save it? ")
-                  (save-buffer))
-             (er-refresh-etags extension)
-             ad-do-it))))
+;; (defadvice find-tag (around refresh-etags activate)
+;;   "Rerun etags and reload tags if tag not found and redo find-tag.
+;;    If buffer is modified, ask about save before running etags."
+;;   (let ((extension (file-name-extension (buffer-file-name))))
+;;     (condition-case err
+;;         ad-do-it
+;;       (error (and (buffer-modified-p)
+;;                   (not (ding))
+;;                   (y-or-n-p "Buffer is modified, save it? ")
+;;                   (save-buffer))
+;;              (er-refresh-etags extension)
+;;              ad-do-it))))
 
-(defun er-refresh-etags (&optional extension)
-  "Run etags on all peer files in current dir and reload them silently."
-  (interactive)
-  (shell-command (format "etags *.%s" (or extension "el")))
-  (let ((tags-revert-without-query t))  ; don't query, revert silently
-    (visit-tags-table default-directory nil)))
+;; (defun er-refresh-etags (&optional extension)
+;;   "Run etags on all peer files in current dir and reload them silently."
+;;   (interactive)
+;;   (shell-command (format "etags *.%s" (or extension "el")))
+;;   (let ((tags-revert-without-query t))  ; don't query, revert silently
+;;     (visit-tags-table default-directory nil)))
 
 ;; irony mode
 ;; (require 'irony)
@@ -479,29 +520,32 @@
 
 ;; rtags + company mode
 ;; (require 'rtags)
-(require 'company)
+;; (require 'company)
 
 ;; (setq rtags-autostart-diagnostics t)
 ;; (rtags-diagnostics)
 ;; (setq rtags-completions-enabled t)
 ;; (push 'company-rtags company-backends)
-(global-company-mode)
+;; (global-company-mode)
 ;; (define-key c-mode-base-map (kbd "<C-.>") (function company-complete))
+(use-package company :ensure t :config (global-company-mode))
 
 ;; ggtags
-(require 'ggtags)
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (ggtags-mode 1))))
+(use-package ggtags :ensure t)
+;; (require 'ggtags)
+;; (add-hook 'c-mode-common-hook
+;;           (lambda ()
+;;             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+;;               (ggtags-mode 1))))
 
 ;; Unbind Pesky Sleep Button
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
+(use-package magit :ensure t :bind ("C-c m" . magit-status))
+
 (defun revert-all-buffers ()
-  "Iterate through the list of buffers and revert them, e.g. after a
-    new branch has been checked out."
+  "Iterate through the list of buffers and revert them, e.g. after a new branch has been checked out."
   (interactive)
   (when (yes-or-no-p "Are you sure - any changes in open buffers will be lost! ")
     (let ((frm1 (selected-frame)))
@@ -522,3 +566,23 @@
                 (revert-buffer t t t)))))
         (select-frame frm1)
         (delete-frame frm2)))))
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(display-time-mode t)
+ '(package-selected-packages
+   (quote
+    (magit ggtags multiple-cursors expand-region helm dap-mode lsp-java lsp-ui company-lsp lsp-mode yasnippet treemacs projectile exec-path-from-shell flycheck paredit use-package)))
+ '(show-paren-mode t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 100 :width normal)))))
