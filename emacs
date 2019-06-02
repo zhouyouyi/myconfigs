@@ -32,6 +32,9 @@
 ;; exec path from shell
 (use-package exec-path-from-shell :ensure t :config (exec-path-from-shell-initialize))
 
+;; CMake mode
+(use-package cmake-mode :ensure t)
+
 ;; lsp mode
 (require 'cc-mode)
 
@@ -185,15 +188,17 @@
 ;; (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; C-Style
-;; (c-add-style "tetrion-c-style"
-;;              '("linux"
-;;                (c-basic-offset . 4)
-;;                (c-offsets-alist . ( (innamespace . [0] ) ) )
-;;                )
-;;              )
-
-;; c-style
-;; (setq c-default-style "tetrion-c-style" )
+(c-add-style "offset-4-c-style"
+             '("linux"
+               (c-basic-offset . 4)
+               (c-offsets-alist . (
+                                   (innamespace . [0])
+                                   (substatement-open . [0])
+                                   )
+                                )
+               )
+             )
+(setq c-default-style "offset-4-c-style" )
 
 ;; (custom-set-variables
 ;;  ;; custom-set-variables was added by Custom.
@@ -576,9 +581,11 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(display-time-mode t)
+ '(lsp-auto-guess-root t)
+ '(lsp-log-io t)
  '(package-selected-packages
    (quote
-    (magit ggtags multiple-cursors expand-region helm dap-mode lsp-java lsp-ui company-lsp lsp-mode yasnippet treemacs projectile exec-path-from-shell flycheck paredit use-package)))
+    (cmake-mode magit ggtags multiple-cursors expand-region helm dap-mode lsp-java lsp-ui company-lsp lsp-mode yasnippet treemacs projectile exec-path-from-shell flycheck paredit use-package)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
